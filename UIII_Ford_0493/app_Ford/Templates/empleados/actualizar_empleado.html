@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Actualizar Empleado{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <!-- Encabezado amarillo -->
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0">Actualizar Empleado (ID: {{ empleado.id }})</h3>
+            </div>
+            
+            <div class="card-body" style="background-color: #fdfdfd;">
+                
+                <!-- 
+                    CORRECCIÓN PRINCIPAL:
+                    Cambiado el action a 'actualizar_empleado' para coincidir con urls.py
+                -->
+                <form action="{% url 'actualizar_empleado' empleado.id %}" method="POST">
+                    {% csrf_token %} 
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" 
+                                   value="{{ empleado.nombre }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="apellido" name="apellido" 
+                                   value="{{ empleado.apellido }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="puesto" class="form-label">Puesto</label>
+                            <input type="text" class="form-control" id="puesto" name="puesto" 
+                                   value="{{ empleado.puesto }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email (Opcional)</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   value="{{ empleado.email|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label">Teléfono (Opcional)</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                   value="{{ empleado.telefono|default:'' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="salario" class="form-label">Salario (Opcional)</label>
+                            <!-- step="0.01" permite decimales -->
+                            <input type="number" class="form-control" id="salario" name="salario" step="0.01" 
+                                   value="{{ empleado.salario|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fecha_contratacion" class="form-label">Fecha de Contratación (Opcional)</label>
+                        <!-- El filtro |date:'Y-m-d' es vital para que el input date reconozca el valor -->
+                        <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion" 
+                               value="{{ empleado.fecha_contratacion|date:'Y-m-d' }}">
+                    </div>
+
+                    <hr>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ver_empleados' %}" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-save-fill"></i> Guardar Cambios
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

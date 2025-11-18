@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Ver Vehículos{% endblock %}
+
+{% block contenido %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Inventario de Vehículos</h1>
+    <a href="{% url 'agregar_vehiculo' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Agregar Nuevo
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Marca</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Año</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">No. Serie</th>
+                        <th scope="col">Precio (MXN)</th>
+                        <th scope="col">Disponibles</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in vehiculos %}
+                    <tr>
+                        <th scope="row">{{ v.id }}</th>
+                        <td>{{ v.marca }}</td>
+                        <td>{{ v.modelo }}</td>
+                        <td>{{ v.anio }}</td>
+                        <td>{{ v.color|default:"N/A" }}</td>
+                        <td>{{ v.numero_serie }}</td>
+                        <td>${{ v.precio }}</td>
+                        <td>{{ v.cantidad_disponible }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'actualizar_vehiculo' v.id %}" 
+                               class="btn btn-warning btn-sm" 
+                               title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            
+                            <button type="button" class="btn btn-danger btn-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#confirmarBorrarModal{{ v.id }}"
+                                    title="Borrar">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+
+                            <div class="modal fade" id="confirmarBorrarModal{{ v.id }}" tabindex="-1" aria-labelledby="modalLabel{{ v.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel{{ v.id }}">Confirmar Eliminación</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            ¿Estás seguro de que deseas eliminar el vehículo: 
+                                            <strong>{{ v.marca }} {{ v.modelo }} ({{ v.anio }})</strong>?
+                                            <p class="text-danger mt-2">Esta acción no se puede deshacer.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <a href="{% url 'borrar_vehiculo' v.id %}" class="btn btn-danger">
+                                                Eliminar Permanentemente
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">
+                            No hay vehículos registrados en el inventario.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

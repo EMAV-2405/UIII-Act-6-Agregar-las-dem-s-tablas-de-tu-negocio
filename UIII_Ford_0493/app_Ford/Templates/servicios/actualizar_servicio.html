@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block titulo %}Actualizar Servicio{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning">
+                <h3 class="mb-0">Actualizar Servicio (ID: {{ servicio.id }})</h3>
+            </div>
+            <div class="card-body" style="background-color: #fdfdfd;">
+                {# CORRECTED LINE BELOW: Changed 'realizar_actualizacion_servicio' to 'actualizar_servicio' #}
+                <form action="{% url 'actualizar_servicio' servicio.id %}" method="POST">
+                    {% csrf_token %} 
+                    <div class="mb-3">
+                        <label for="vehiculo" class="form-label">Vehículo</label>
+                        <select class="form-select" id="vehiculo" name="vehiculo" required>
+                            {% for v in vehiculos %}
+                                <option value="{{ v.id }}" {% if v.id == servicio.vehiculo.id %}selected{% endif %}>
+                                    {{ v.marca }} {{ v.modelo }} ({{ v.anio }}) - {{ v.numero_serie }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cliente" class="form-label">Cliente (Opcional)</label>
+                            <select class="form-select" id="cliente" name="cliente">
+                                <option value="">Selecciona un cliente</option>
+                                {% for c in clientes %}
+                                    <option value="{{ c.id }}" {% if servicio.cliente and c.id == servicio.cliente.id %}selected{% endif %}>
+                                        {{ c.nombre }} {{ c.apellido }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="proveedor" class="form-label">Proveedor (Taller)</label>
+                            <select class="form-select" id="proveedor" name="proveedor">
+                                <option value="">Selecciona un proveedor</option>
+                                {% for p in proveedores %}
+                                    <option value="{{ p.id }}" {% if servicio.proveedor and p.id == servicio.proveedor.id %}selected{% endif %}>
+                                        {{ p.nombre_proveedor }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
+                            <input type="text" class="form-control" id="tipo_servicio" name="tipo_servicio" value="{{ servicio.tipo_servicio }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="fecha_servicio" class="form-label">Fecha del Servicio</label>
+                            <input type="date" class="form-control" id="fecha_servicio" name="fecha_servicio" value="{{ servicio.fecha_servicio|date:'Y-m-d' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="costo_servicio" class="form-label">Costo (MXN)</label>
+                            <input type="number" class="form-control" id="costo_servicio" name="costo_servicio" value="{{ servicio.costo_servicio }}" step="0.01" required>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ver_servicios' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-warning"><i class="bi bi-save-fill"></i> Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

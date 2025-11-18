@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block titulo %}Registrar Servicio{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h3 class="mb-0">Registrar Nuevo Servicio de Mantenimiento</h3>
+            </div>
+            <div class="card-body" style="background-color: #fdfdfd;">
+                <form action="{% url 'agregar_servicio' %}" method="POST">
+                    {% csrf_token %} 
+                    <div class="mb-3">
+                        <label for="vehiculo" class="form-label">Vehículo</label>
+                        <select class="form-select" id="vehiculo" name="vehiculo" required>
+                            <option value="">Selecciona un vehículo</option>
+                            {% for v in vehiculos %}
+                                <option value="{{ v.id }}">{{ v.marca }} {{ v.modelo }} ({{ v.anio }}) - {{ v.numero_serie }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cliente" class="form-label">Cliente (Opcional)</label>
+                            <select class="form-select" id="cliente" name="cliente">
+                                <option value="">Selecciona un cliente</option>
+                                {% for c in clientes %}
+                                    <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="proveedor" class="form-label">Proveedor (Taller)</label>
+                            <select class="form-select" id="proveedor" name="proveedor">
+                                <option value="">Selecciona un proveedor</option>
+                                {% for p in proveedores %}
+                                    <option value="{{ p.id }}">{{ p.nombre_proveedor }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
+                            <input type="text" class="form-control" id="tipo_servicio" name="tipo_servicio" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="fecha_servicio" class="form-label">Fecha del Servicio</label>
+                            <input type="date" class="form-control" id="fecha_servicio" name="fecha_servicio" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="costo_servicio" class="form-label">Costo (MXN)</label>
+                            <input type="number" class="form-control" id="costo_servicio" name="costo_servicio" step="0.01" required>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ver_servicios' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-dark"><i class="bi bi-tools"></i> Registrar Servicio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

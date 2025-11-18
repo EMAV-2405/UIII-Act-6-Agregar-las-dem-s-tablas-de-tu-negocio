@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Inicio - Ford{% endblock %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="display-4 fw-bold">Bienvenido al Sistema de Administración Ford</h1>
+            <p class="lead">
+                Este sistema permite gestionar los vehículos, empleados y ventas
+                de la concesionaria.
+            </p>
+            <hr class="my-4">
+            <p>
+                Utilice la barra de navegación superior para acceder a las 
+                diferentes secciones del sistema.
+            </p>
+            <ul>
+                <li><strong>Vehículos:</strong> Agregue nuevos autos, vea el inventario, actualice precios y elimine unidades.</li>
+                <li><strong>Empleados:</strong> (Próximamente) Gestión del personal.</li>
+                <li><strong>Ventas:</strong> (Próximamente) Registro de ventas y facturación.</li>
+            </ul>
+        </div>
+        <div class="col-md-5 d-flex align-items-center justify-content-center">
+            <img src="https://1000marcas.net/wp-content/uploads/2020/01/Ford-Logo-2003.png" 
+                 class="img-fluid rounded shadow-sm" 
+                 alt="Logo de Ford">
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

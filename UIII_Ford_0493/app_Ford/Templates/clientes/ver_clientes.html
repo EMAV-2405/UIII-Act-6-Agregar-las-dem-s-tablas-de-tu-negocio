@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block titulo %}Ver Clientes{% endblock %}
+
+{% block contenido %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Gestión de Clientes</h1>
+    <a href="{% url 'agregar_cliente' %}" class="btn btn-info text-white">
+        <i class="bi bi-person-plus-fill"></i> Registrar Nuevo Cliente
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Fecha Registro</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clientes %}
+                    <tr>
+                        <th scope="row">{{ c.id }}</th>
+                        <td>{{ c.nombre }}</td>
+                        <td>{{ c.apellido }}</td>
+                        <td>{{ c.correo_electronico|default:"N/A" }}</td>
+                        <td>{{ c.telefono|default:"N/A" }}</td>
+                        <td>{{ c.fecha_registro|date:"d/m/Y" }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'actualizar_cliente' c.id %}" class="btn btn-warning btn-sm" title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarBorrarModal{{ c.id }}" title="Borrar">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                            <div class="modal fade" id="confirmarBorrarModal{{ c.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirmar Eliminación</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            ¿Estás seguro de que deseas eliminar al cliente: <strong>{{ c.nombre }} {{ c.apellido }}</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <a href="{% url 'borrar_cliente' c.id %}" class="btn btn-danger">Eliminar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No hay clientes registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

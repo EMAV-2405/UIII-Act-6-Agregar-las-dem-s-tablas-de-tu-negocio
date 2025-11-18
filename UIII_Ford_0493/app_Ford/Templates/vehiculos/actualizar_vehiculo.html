@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Actualizar Vehículo{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0">Actualizar Vehículo (ID: {{ vehiculo.id }})</h3>
+            </div>
+            <div class="card-body" style="background-color: #fdfdfd;">
+                
+                <!-- 
+                   CORRECCIÓN: 
+                   Cambiado 'realizar_actualizacion_vehiculo' por 'actualizar_vehiculo'
+                -->
+                <form action="{% url 'actualizar_vehiculo' vehiculo.id %}" method="POST">
+                    {% csrf_token %} 
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="marca" class="form-label">Marca</label>
+                            <input type="text" class="form-control" id="marca" name="marca" 
+                                   value="{{ vehiculo.marca }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modelo" class="form-label">Modelo</label>
+                            <input type="text" class="form-control" id="modelo" name="modelo" 
+                                   value="{{ vehiculo.modelo }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="anio" class="form-label">Año</label>
+                            <input type="number" class="form-control" id="anio" name="anio" 
+                                   value="{{ vehiculo.anio }}" min="1990" max="2030" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="color" class="form-label">Color</label>
+                            <input type="text" class="form-control" id="color" name="color" 
+                                   value="{{ vehiculo.color|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="numero_serie" class="form-label">Número de Serie (VIN)</label>
+                            <input type="text" class="form-control" id="numero_serie" name="numero_serie" 
+                                   value="{{ vehiculo.numero_serie }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="precio" class="form-label">Precio (MXN)</label>
+                            <input type="number" class="form-control" id="precio" name="precio" 
+                                   value="{{ vehiculo.precio }}" step="0.01" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cantidad_disponible" class="form-label">Cantidad Disponible</label>
+                            <input type="number" class="form-control" id="cantidad_disponible" name="cantidad_disponible" 
+                                   value="{{ vehiculo.cantidad_disponible }}" min="0" required>
+                        </div>
+                    </div>
+
+                    <hr>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ver_vehiculos' %}" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-save-fill"></i> Guardar Cambios
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

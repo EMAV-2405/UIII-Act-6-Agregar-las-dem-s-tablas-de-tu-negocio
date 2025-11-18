@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Ver Empleados{% endblock %}
+
+{% block contenido %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Gestión de Empleados</h1>
+    <a href="{% url 'agregar_empleado' %}" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill"></i> Registrar Nuevo Empleado
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Puesto</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Contratación</th>
+                        <th scope="col">Salario (MXN)</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in empleados %}
+                    <tr>
+                        <th scope="row">{{ e.id }}</th>
+                        <td>{{ e.nombre }}</td>
+                        <td>{{ e.apellido }}</td>
+                        <td>{{ e.puesto }}</td>
+                        <td>{{ e.telefono|default:"N/A" }}</td>
+                        <td>{{ e.email|default:"N/A" }}</td>
+                        <td>{{ e.fecha_contratacion|date:"d/m/Y"|default:"N/A" }}</td>
+                        <td>${{ e.salario|default:"N/A" }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'actualizar_empleado' e.id %}" 
+                               class="btn btn-warning btn-sm" 
+                               title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            
+                            <button type="button" class="btn btn-danger btn-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#confirmarBorrarModal{{ e.id }}"
+                                    title="Borrar">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+
+                            <div class="modal fade" id="confirmarBorrarModal{{ e.id }}" tabindex="-1" aria-labelledby="modalLabel{{ e.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel{{ e.id }}">Confirmar Eliminación</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            ¿Estás seguro de que deseas eliminar al empleado: 
+                                            <strong>{{ e.nombre }} {{ e.apellido }}</strong>?
+                                            <p class="text-danger mt-2">Esta acción no se puede deshacer.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <a href="{% url 'borrar_empleado' e.id %}" class="btn btn-danger">
+                                                Eliminar Permanentemente
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">
+                            No hay empleados registrados.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Actualizar Venta{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Actualizar Venta (ID: {{ venta.id }})</h3>
+            </div>
+            <div class="card-body" style="background-color: #fdfdfd;">
+                
+                <!-- 
+                    NUEVO: Bloque para mostrar errores de stock 
+                    (Necesario porque tu view valida el inventario)
+                -->
+                {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+
+                <!-- 
+                    CORRECCIÓN: Cambiado a 'actualizar_venta'
+                -->
+                <form action="{% url 'actualizar_venta' venta.id %}" method="POST">
+                    {% csrf_token %} 
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="vehiculo" class="form-label">Vehículo</label>
+                            <select class="form-select" id="vehiculo" name="vehiculo" required>
+                                {% for v in vehiculos %}
+                                    <!-- Se marca como 'selected' si coincide con el vehículo actual de la venta -->
+                                    <option value="{{ v.id }}" {% if v.id == venta.vehiculo.id %}selected{% endif %}>
+                                        {{ v.marca }} {{ v.modelo }} ({{ v.anio }}) - ${{ v.precio }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="empleado" class="form-label">Empleado (Opcional)</label>
+                            <select class="form-select" id="empleado" name="empleado">
+                                <option value="">Sin empleado asignado</option>
+                                {% for e in empleados %}
+                                    <option value="{{ e.id }}" {% if venta.empleado and e.id == venta.empleado.id %}selected{% endif %}>
+                                        {{ e.nombre }} {{ e.apellido }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cliente_nombre" class="form-label">Nombre del Cliente</label>
+                            <input type="text" class="form-control" id="cliente_nombre" name="cliente_nombre" 
+                                   value="{{ venta.cliente_nombre }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cliente_telefono" class="form-label">Teléfono del Cliente</label>
+                            <input type="text" class="form-control" id="cliente_telefono" name="cliente_telefono" 
+                                   value="{{ venta.cliente_telefono|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="total" class="form-label">Total de la Venta (MXN)</label>
+                            <input type="number" class="form-control" id="total" name="total" step="0.01" 
+                                   value="{{ venta.total }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="metodo_pago" class="form-label">Método de Pago</label>
+                            <input type="text" class="form-control" id="metodo_pago" name="metodo_pago" 
+                                   value="{{ venta.metodo_pago|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="folio" class="form-label">Folio de Venta (Opcional)</label>
+                        <input type="text" class="form-control" id="folio" name="folio" 
+                               value="{{ venta.folio|default:'' }}">
+                    </div>
+
+                    <hr>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ver_ventas' %}" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save-fill"></i> Guardar Cambios
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block titulo %}Registrar Proveedor{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header" style="background-color: #6f42c1; color: white;">
+                <h3 class="mb-0">Registrar Nuevo Proveedor</h3>
+            </div>
+            <div class="card-body" style="background-color: #fdfdfd;">
+                <form action="{% url 'agregar_proveedor' %}" method="POST">
+                    {% csrf_token %} 
+                    <div class="mb-3">
+                        <label for="nombre_proveedor" class="form-label">Nombre del Proveedor</label>
+                        <input type="text" class="form-control" id="nombre_proveedor" name="nombre_proveedor" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion">
+                    </div>
+                     <div class="mb-3">
+                        <label for="producto" class="form-label">Producto / Servicio Principal</label>
+                        <input type="text" class="form-control" id="producto" name="producto">
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ver_proveedores' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn" style="background-color: #6f42c1; color: white;"><i class="bi bi-building-add"></i> Registrar Proveedor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

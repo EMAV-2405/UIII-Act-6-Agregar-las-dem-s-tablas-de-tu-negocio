@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Ver Ventas{% endblock %}
+
+{% block contenido %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Historial de Ventas</h1>
+    <a href="{% url 'agregar_venta' %}" class="btn btn-success">
+        <i class="bi bi-cart-plus"></i> Registrar Nueva Venta
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Folio</th>
+                        <th scope="col">Fecha Venta</th>
+                        <th scope="col">Vehículo</th>
+                        <th scope="col">Empleado</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Tel. Cliente</th>
+                        <th scope="col">Total (MXN)</th>
+                        <th scope="col">Método Pago</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in ventas %}
+                    <tr>
+                        <th scope="row">{{ v.id }}</th>
+                        <td>{{ v.folio|default:"N/A" }}</td>
+                        <td>{{ v.fecha_venta|date:"d/m/Y" }}</td>
+                        <td>{{ v.vehiculo.marca }} {{ v.vehiculo.modelo }}</td>
+                        <td>{{ v.empleado.nombre }} {{ v.empleado.apellido }}</td>
+                        <td>{{ v.cliente_nombre }}</td>
+                        <td>{{ v.cliente_telefono|default:"N/A" }}</td>
+                        <td>${{ v.total }}</td>
+                        <td>{{ v.metodo_pago|default:"N/A" }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'actualizar_venta' v.id %}" 
+                               class="btn btn-warning btn-sm" 
+                               title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            
+                            <button type="button" class="btn btn-danger btn-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#confirmarBorrarModal{{ v.id }}"
+                                    title="Borrar">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+
+                            <div class="modal fade" id="confirmarBorrarModal{{ v.id }}" tabindex="-1" aria-labelledby="modalLabel{{ v.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel{{ v.id }}">Confirmar Eliminación de Venta</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            ¿Estás seguro de que deseas eliminar la venta con Folio: 
+                                            <strong>{{ v.folio|default:v.id }}</strong> al cliente 
+                                            <strong>{{ v.cliente_nombre }}</strong> del vehículo 
+                                            <strong>{{ v.vehiculo.marca }} {{ v.vehiculo.modelo }}</strong>?
+                                            <p class="text-danger mt-2">Esta acción no se puede deshacer y devolverá el vehículo al inventario.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <a href="{% url 'borrar_venta' v.id %}" class="btn btn-danger">
+                                                Eliminar Permanentemente
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center text-muted">
+                            No hay ventas registradas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

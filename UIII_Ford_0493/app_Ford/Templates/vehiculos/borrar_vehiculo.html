@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Borrar Vehículo{% endblock %}
+
+{% block contenido %}
+<!-- Esta plantilla no se usa directamente ya que el borrado se maneja con un modal y redirección. -->
+<div class="alert alert-info text-center" role="alert">
+    Si llegaste aquí, algo salió diferente al flujo esperado.
+</div>
+<div class="text-center">
+    <a href="{% url 'ver_vehiculos' %}" class="btn btn-primary">Volver al Inventario</a>
+</div>
+{% endblock %}
